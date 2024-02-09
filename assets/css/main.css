@@ -251,16 +251,37 @@ input[type="submit"]:active {
         text-align: left;
     }
 
-    /* Different styles for different actions */
-    .view-full {
-        color: green;
-    }
 
-    .view-part {
-        color: orange;
+    .rectangles {
+        display: flex;
+      }
+      
+    .rectangle {
+    margin: auto;
+    width: 30px;
+    height: 5px;
+    margin-right: 5px;
+    background-color: rgb(238, 238, 238);
+    border: 2px solid transparent;
+    border-radius: 10px; /* Rounded corners */
     }
-
-    .create-full {
-        color: blue;
+    
+    .blue {
+    background-color: rgb(6, 150, 215); /* Light blue color */
     }
-
+    
+    .blue-outline {
+    border-color: rgb(6, 150, 215); /* Light blue border color */
+    }
+    .permissionLevelText {
+    font-family: "Artifakt Element", sans-serif;
+    margin-left: 10px;
+    margin: 0;
+    text-align: center;
+    }
+    .permissionsContainer{
+    width: 160;
+    margin-left: 10;
+    margin-right: 10;
+    }
+      

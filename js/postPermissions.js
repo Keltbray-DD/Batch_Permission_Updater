@@ -491,7 +491,7 @@ function createPermissionsHTML(data,permissions) {
         console.error('Container element not found.');
         return;
     }
-    
+    console.log(data)
     data.forEach(folder => {
         const folderDiv = document.createElement('div');
         folderDiv.classList.add('folder');
@@ -507,20 +507,81 @@ function createPermissionsHTML(data,permissions) {
         // Create table header
         const headerRow = permissionsTable.insertRow();
         const th1 = document.createElement('th');
-        th1.textContent = 'Permission Name';
+        th1.textContent = 'Name';
         const th2 = document.createElement('th');
-        th2.textContent = 'Actions';
+        th2.textContent = 'Permissions';
+        const th3 = document.createElement('th');
+        th3.textContent = 'Actions';
         headerRow.appendChild(th1);
         headerRow.appendChild(th2);
+        headerRow.appendChild(th3);
 
         folder.folderPermissions.forEach(permission => {
             const permissionRow = permissionsTable.insertRow();
             const cell1 = permissionRow.insertCell();
             cell1.textContent = permission.name;
+
             const cell2 = permissionRow.insertCell();
+            const rectangleHTML_viewPart = `<div class="permissionsContainer"><div class="rectangles">
+                <div class="rectangle blue-outline"></div>
+                <div class="rectangle"></div>
+                <div class="rectangle"></div>
+                <div  class="rectangle"></div>
+                </div>
+                <div><p class="permissionLevelText">View</p></div>
+            </div>`;
+            const rectangleHTML_viewFull = `<div class="permissionsContainer"><div class="rectangles">
+                <div class="rectangle blue"></div>
+                <div class="rectangle"></div>
+                <div class="rectangle"></div>
+                <div class="rectangle"></div>
+                </div>
+                <div><p class="permissionLevelText">View</p></div>
+            </div>`;
+            const rectangleHTML_createPart = `<div class="permissionsContainer"><div class="rectangles">
+                <div class="rectangle blue"></div>
+                <div class="rectangle blue-outline"></div>
+                <div class="rectangle"></div>
+                <div class="rectangle"></div>
+                </div>
+                <div><p class="permissionLevelText">Create</p></div>
+                </div>
+            `;
+            const rectangleHTML_createFull = `<div class="permissionsContainer"><div class="rectangles">
+                <div class="rectangle blue"></div>
+                <div class="rectangle blue"></div>
+                <div class="rectangle"></div>
+                <div class="rectangle"></div>
+                </div>
+                <div><p class="permissionLevelText">Create</p></div>
+                </div>
+            `;
+
+            // Apply styles based on permission level
+            switch (permission.actions) {
+                case 'viewPart':
+                    // Add blue-outline class to cell1
+                    cell2.innerHTML = rectangleHTML_viewPart
+                    break;
+                case 'viewFull':
+                    // Add blue class to cell1
+                    cell2.innerHTML = rectangleHTML_viewFull
+                    break;
+                case 'createPart':
+                    // Add blue class to cell1 and blue-outline class to cell2
+                    cell2.innerHTML = rectangleHTML_createPart
+                    break;
+                case 'createFull':
+                    // Add blue class to both cell1 and cell2
+                    cell2.innerHTML = rectangleHTML_createFull
+                    break;
+                default:
+                    break;
+            }
+            const cell3 = permissionRow.insertCell();
             const perm = permissions.find(perm => perm.level === permission.actions);
             if (perm) {
-                cell2.textContent = perm.actions.join(', ');
+                cell3.textContent = perm.actions.join(', ');
             } else {
                 cell2.textContent = 'Unknown Permission Level';
             }
@@ -537,7 +598,53 @@ function createPermissionsHTML(data,permissions) {
 }
 
 
+
     // Call the function with the provided data
     document.addEventListener('DOMContentLoaded', function() {
         createPermissionsHTML(folderPermissionList,permssions);
     });
+
+    function updateRectangles(state) {
+
+        // Get references to the rectangles
+        const rectangle1 = document.getElementById('rectangle1');
+        const rectangle2 = document.getElementById('rectangle2');
+        const rectangle3 = document.getElementById('rectangle3');
+        const rectangle4 = document.getElementById('rectangle4');
+        const permissiontext = document.getElementById('PermissionLevel');
+      // Reset all rectangles
+        rectangle1.classList.remove('blue', 'blue-outline');
+        rectangle2.classList.remove('blue', 'blue-outline');
+        rectangle3.classList.remove('blue', 'blue-outline');
+        rectangle4.classList.remove('blue', 'blue-outline');
+    
+      // Apply styles based on state
+      switch (state) {
+        case 'viewPart':
+          rectangle1.classList.add('blue-outline');
+          permissiontext.innerText = "View"
+          break;
+        case 'viewFull':
+          rectangle1.classList.add('blue');
+          permissiontext.innerText = "View"
+          break;
+        case 'createPart':
+          rectangle1.classList.add('blue');
+          rectangle2.classList.add('blue-outline');
+          permissiontext.innerText = "Create"
+          break;
+        case 'createFull':
+          rectangle1.classList.add('blue');
+          rectangle2.classList.add('blue');
+          permissiontext.innerText = "Create"
+          break;
+        case 'createFull':
+            rectangle1.classList.add('blue');
+            rectangle2.classList.add('blue');
+            rectangle3.classList.add('blue-outline');
+            permissiontext.innerText = "Edit"
+            break;
+        default:
+          break;
+      }
+    }
