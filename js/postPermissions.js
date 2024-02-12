@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         //updateElapsedTime(startTime);
 
         // Call the searchAndPerformAction function here
-        await batchUpdatePermissions(startfolder_list, clientId, clientSecret);
+        await batchUpdatePermissions(startfolder_list);
 
         // Record the end time
         const endTime = performance.now();
@@ -95,17 +95,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //postPermissions("urn:adsk.wipemea:fs.folder:co.Oh5aOZXRQMyi3Q4pdbyUfA",accessToken,"08b0cb89-fe11-4629-82da-6acf4c26d059","a7280946-cce3-4200-bbf5-34c29c253b0b","338863393")
 
-async function batchUpdatePermissions(startfolder_list,clientId, clientSecret){
+async function batchUpdatePermissions(startfolder_list){
     if(startfolder_list.length === 0){
         alert("Please enter a URL before clicking start")
     }else{
         try {
-            access_token_create = await getAccessToken("account:write");
+            access_token_create = await getAccessToken("data:write");
         } catch {
             console.log("Error: Getting Create Access Token");
         }
         try {
-            access_token_read = await getAccessToken("account:read");
+            access_token_read = await getAccessToken("data:read");
         } catch {
             console.log("Error: Getting Read Access Token");
         }
@@ -341,7 +341,7 @@ async function postPermissions(AccessToken,folder_id,project_id,subject_id,subje
 
     const apiUrl = "https://developer.api.autodesk.com/bim360/docs/v1/projects/"+project_id+"/folders/"+folder_id+"/permissions:batch-update";
     //console.log(apiUrl)
-    //console.log(requestOptions)
+    console.log(requestOptions)
     signedURLData = await fetch(apiUrl,requestOptions)
         .then(response => response.json())
         .then(data => {
